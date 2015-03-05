@@ -2,7 +2,7 @@
 
 Add framasoft navbar to Etherpad
 
-We use https://git.framasoft.org/framasoft/framanav.git$ as subtree in git, so some things are a little tricky.
+We use https://git.framasoft.org/framasoft/framanav.git as subtree in git, so some things are a little tricky.
 
 See [this post](http://blogs.atlassian.com/2013/05/alternatives-to-git-submodule-git-subtree/) about `git subtree`.
 
