@@ -1,0 +1,10 @@
+{
+    "parts": [
+        {
+            "name": "ep_framasoft",
+            "hooks": {
+                "eejsBlock_htmlHead": "ep_framasoft/pad"
+            }
+        }
+    ]
+}

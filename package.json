@@ -1,0 +1,19 @@
+{
+    "name": "ep_framasoft",
+    "version": "0.0.1",
+    "description": "Add framasoft navbar to Etherpad",
+    "author": {
+        "name": "Luc Didry",
+        "email": "luc@didry.org",
+        "url": "https://fiat-tux.fr"
+    },
+    "dependencies": {
+    },
+    "peerDependencies":{
+    },
+    "repository" : {
+        "type" : "git",
+        "url" : "https://git.framasoft.org/framasoft/ep_framasoft.git"
+    }
+}
+
