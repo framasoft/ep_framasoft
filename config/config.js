@@ -69,6 +69,8 @@ switch (f$_site) {
     case 'quotidien.framapad' : f$_site = 'instances.framapad'; break;
     case 'hebdo.framapad' : f$_site = 'instances.framapad'; break;
     case 'mensuel.framapad' : f$_site = 'instances.framapad'; break;
+    case 'bimestriel.framapad' : f$_site = 'instances.framapad'; break;
+    case 'semestriel.framapad' : f$_site = 'instances.framapad'; break;
     case 'annuel.framapad' : f$_site = 'instances.framapad'; break;
     case 'education.framapad' : f$_site = 'instances.framapad'; break;
     case 'sciences.framapad' : f$_site = 'instances.framapad'; break;
@@ -77,6 +79,7 @@ switch (f$_site) {
     case 'huit.re' : f$_site = 'frama.link'; break;
     case 'tontonroger' : f$_site = 'framabee'; break;
     case 'trouvons' : f$_site = 'framabee'; break;
+    case 'test.framacalc' : f$_site = 'framacalc'; break;
 }
 
 // À propos
@@ -85,7 +88,7 @@ var f$_credits = f$_site;
 
 // Piwik
 var f$_piwik_id = '';
-var f$_piwik_url = 'http://stats.framasoft.org/';
+var f$_piwik_url = 'https://stats.framasoft.org/';
 switch (f$_site) {
     case 'framasoft' :              f$_piwik_id = '1';  break;
     case 'forum.framasoft' :        f$_piwik_id = '2';  break;
@@ -98,9 +101,9 @@ switch (f$_site) {
     case 'framabook' :              f$_piwik_id = '7';  break;
     case 'framatube' :              f$_piwik_id = '8';  break;
     case 'framazic' :               f$_piwik_id = '9';  break;
-    case 'framadate' :              f$_piwik_id = '10'; f$_piwik_url = 'https://framadate.org/piwik/'; break;
+    case 'framadate' :              f$_piwik_id = '10'; break;
     case 'framacalc' :              f$_piwik_id = '11'; break;
-    case 'framindmap' :             f$_piwik_id = '12'; f$_piwik_url = 'https://framindmap.org/piwik/'; break;
+    case 'framindmap' :             f$_piwik_id = '12'; break;
     case 'framavectoriel' :         f$_piwik_id = '13'; break;
     case 'framaphonie' :            f$_piwik_id = '14'; break;
     case 'wiki.framasoft' :         f$_piwik_id = '15'; break;
@@ -108,13 +111,13 @@ switch (f$_site) {
     case 'framacode' :              f$_piwik_id = '17'; break;
     case 'soutenir.framasoft' :     f$_piwik_id = '18'; break;
     case 'contact.framasoft' :      f$_piwik_id = '19'; break;
-    case 'framanews' :              f$_piwik_id = '20'; f$_piwik_url = 'https://framanews.org/piwik/'; break;
+    case 'framanews' :              f$_piwik_id = '20'; break;
     case 'framabag' :               f$_piwik_id = '21'; break;
     case 'framandroid' :            f$_piwik_id = '22'; break;
     case 'framastart' :             f$_piwik_id = '23'; break;
     case 'framapack' :              f$_piwik_id = '24'; break;
     case '10ans.framasoft' :        f$_piwik_id = '25'; break;
-    case 'framasphere' :            f$_piwik_id = '26'; f$_piwik_url = 'https://framasphere.org/piwik/'; break;
+    case 'framasphere' :            f$_piwik_id = '26'; break;
     case 'framabee' :               f$_piwik_id = '27'; break;
     case 'framagames' :             f$_piwik_id = '28'; break;
     case 'git.framasoft' :          f$_piwik_id = '29'; break;
@@ -124,6 +127,8 @@ switch (f$_site) {
     case 'participer.framasoft' :   f$_piwik_id = '33'; break;
     case 'framacolibri' :           f$_piwik_id = '33'; break;
     case 'framabin' :               f$_piwik_id = '34'; break;
+    case 'framacloud' :             f$_piwik_id = '35'; break;
+    case 'git.framasoft' :          f$_piwik_id = '36'; break;
 }
 
 if(f$_piwik_id != '') {
@@ -147,8 +152,7 @@ if(f$_piwik_id != '') {
     _paq.push(["enableLinkTracking"]);
 
     (function() {
-      var u=(("https:" == document.location.protocol) ? "https:" : "http:") + f$_piwik_url.replace(/(http:|https:)/,'');
-      console.log('Ok piwik : '+u+'piwik.js');
+      var u=f$_piwik_url;
       _paq.push(["setTrackerUrl", u+"piwik.php"]);
       _paq.push(["setSiteId", f$_piwik_id]);
       var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
