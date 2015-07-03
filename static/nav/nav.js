@@ -1,4 +1,4 @@
-var f$_version = '141229';
+var f$_version = '140612';
 var f$_site = window.location.host
 f$_site = f$_site.replace(/^(www|test)\./i,"");
 f$_site = f$_site.replace(/\.(com|net|org|fr|pro)$/i,"");
@@ -6,7 +6,6 @@ f$_site = f$_site.replace(/\.(com|net|org|fr|pro)$/i,"");
 var f$_url = window.location.href;
 
 var f$_not_in_frame = (top.location==self.document.location); // Pas dans une Frame
-console.log('Not in frame ? '+f$_not_in_frame);
 
 // console n'existe pas sur IE8
 (function() {
@@ -35,11 +34,12 @@ console.log('Not in frame ? '+f$_not_in_frame);
  *  Config globale
  *******************/
 var f$_start_global_config = function() {
+    var f$_speed = (f$_nav_container) ? '☀' : '☁';
     if (f$_config == 'global') {
-        console.log('Ok config.js');
+        console.log('✔ '+f$_speed+' config.js');
         f$_loadScript(f$_nav+'config/'+f$_site+'.js', f$_start_local_config);
     } else {
-        console.error('config.js');
+        console.error('✘ '+f$_speed+' config.js');
     }
 }; // ---> site.js
 
@@ -48,7 +48,7 @@ var f$_start_global_config = function() {
  *******************/
 var f$_start_local_config = function() {
     if (f$_config == 'local') {
-        console.log('Ok '+f$_site+'.js');
+        console.log('✔ '+f$_site+'.js');
 
         if(f$_page('/nav/html/')) { // Si pages « À propos » on reinit la config
             f$_jquery = 'jQuery';
@@ -58,30 +58,30 @@ var f$_start_local_config = function() {
 
         if (f$_jquery == 'jQuery') {
             if (window.jQuery === undefined || window.jQuery.fn.jquery !== '1.10.2') {
-                console.log('jQuery chargé par AJAX - Mode isolé');
+                console.log('✔ jQuery AJAX');
                 f$_loadScript(f$_nav+'lib/jquery/jquery.min.js', f$_start_jquery);
             } else {
-                console.log('jQuery chargé par HTML');
+                console.log('✔ jQuery HTML');
                 f$_start_jquery();
             }
         } else if (f$_jquery == 'fQuery') {
             if (window.fQuery === undefined) {
-                console.log('fQuery chargé par AJAX - Mode isolé');
+                console.log('✔ fQuery AJAX');
                 f$_loadScript(f$_nav+'lib/jquery/fquery.min.js', f$_start_jquery);
             } else {
-                console.log('fQuery chargé par HTML');
+                console.log('✔ fQuery HTML');
                 f$_start_jquery();
             }
         } else {
             if (window.jQuery === undefined) {
-                console.log('Pas de jQuery :-( ');
+                console.error('✘ jQuery');
             } else {
-                console.log('jQuery chargé par HTML - version '+window.jQuery.fn.jquery);
+                console.log('✔ jQuery '+window.jQuery.fn.jquery+' HTML');
                 f$_start_jquery();
             }
         }
     } else {
-        console.error(f$_site+'.js');
+        console.error('✘ '+f$_site+'.js');
     }
 } // ---> jQuery
 
@@ -103,12 +103,8 @@ var f$_nav_init = function() {
                 // si nav.js est appelé en haut du body, c'est super rapide
                 var navContainer = (f$_not_in_frame) ? '<div id="framanav_container" style="height:42px"></div>' : '<div id="framanav_container"></div>';
                 document.write(navContainer);
-                console.log('Nav fast');
                 f$_nav_container = true;
-            } else {
-                // sinon c'est dans le head, il faut attendre document.ready (voir plus bas)
-                console.log('Nav slow');
-            }
+            } // sinon c'est dans le head, il faut attendre document.ready (voir plus bas)
         }
     }
 
@@ -144,11 +140,10 @@ function f$_start_jquery() {
     if(f$_extra_css) {
         f$_loadCSS(f$_nav+'config/'+f$_site+'_extra.css');
     }
-
+    
     /*
      * Nav
      */
-    console.log('Ok '+f$_jquery);
     if (f$_jquery == 'fQuery') {
         var f$ = (f$_jquery_noconflict) ? fQuery.noConflict() : fQuery;
     } else {
@@ -167,17 +162,9 @@ function f$_start_jquery() {
             url: f$_nav+'nav.html'
         })
         .fail(function() {
-            console.error('Pas de nav.html');
+            console.error('✘ nav.html');
         })
         .done(function(html) {
-            // On ajoute le viewport si Responsive
-            if (f$_responsive) {
-                f$('head').append('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
-                console.log('Ok Responsive activé');
-            } else {
-                console.info('Responsive désactivé');
-            }
-
             // On affiche le code html
             f$('#framanav_container').addClass('hidden-print');
             f$('#framanav_container').prepend(html);
@@ -187,28 +174,75 @@ function f$_start_jquery() {
                 f$(this).attr('src',link.replace('nav/',f$_nav));
             });
 
+            // On ajoute le viewport si Responsive
+            var f$_btn_desktop = f$('.framanav-desktop');
+            var f$_btn_mobile = f$('.framanav-mobile');
+
+            function f$_mobile() {
+                var f$_viewport = f$('meta[name="viewport"]');
+                if (f$_viewport.length==0) {
+                    f$('head').prepend('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
+                } else {
+                    f$_viewport.attr('content','width=device-width, initial-scale=1.0');
+                }
+                f$_btn_desktop.addClass('visible-xs-inline').show();
+                f$_btn_mobile.hide();
+            };
+
+            function f$_desktop() {
+                var f$_viewport = f$('meta[name="viewport"]');
+                if (f$_viewport.length) {
+                    f$_viewport.attr('content','width=1024');
+                }
+                f$_btn_desktop.removeClass('visible-xs-inline').hide();
+                f$_btn_mobile.show();
+            }
+
+            if (f$_responsive) {
+            // Viewport mobile si Responsive dans la config
+            // Boutons « Désactiver mode mobile » par défaut
+                f$_mobile();
+            } else if (f$('meta[name="viewport"]').length==0) {
+            // Bouton « Activer mode mobile » par défaut
+                f$_desktop();
+            }
+            // Si (Dés)Activation mannuel, le cookie prend la main le temps de la session
+            switch (getCookie('nav_viewport')) {
+                case 'mobile': f$_mobile(); break;
+                case 'desktop': f$_desktop(); break;
+            }
+            // Boutons (Dés)Activer le mode mobile
+            f$_btn_mobile.on('click', function() {
+                f$_mobile();
+                document.cookie = 'nav_viewport=mobile;expire=0';
+            });
+            f$_btn_desktop.on('click', function() {
+                f$_desktop();
+                document.cookie = 'nav_viewport=desktop;expire=0';
+            });
+
             /*******************
              *   BootStrap JS
              *******************/
             if (f$_bootstrap_js) {
                 if (typeof f$().modal == 'function' || f$_bootstrap_js == 'html') {
-                    console.log('Ok Bootstrap actif (html)');
+                    console.log('✔ Bootstrap HTML');
                     go_BootStrap();
                 } else {
                     if (f$_jquery == 'fQuery') {
                         f$.getScript(f$_nav+'lib/bootstrap/js/fbootstrap.min.js', function() {
-                            console.log('Ok Bootstrap actif (ajax) fbootstrap.min.js');
+                            console.log('✔ fBootstrap Ajax');
                             go_BootStrap();
                         });
                     } else {
                         f$.getScript(f$_nav+'lib/bootstrap/js/bootstrap.min.js', function() {
-                            console.log('Ok Bootstrap actif (ajax) bootstrap.min.js');
+                            console.log('✔ Bootstrap Ajax');
                             go_BootStrap();
                         });
                     }
                 }
             } else {
-                console.info('bootstrap.min.js désactivé');
+                console.info('✘ Bootstrap');
             }
 
 
@@ -236,7 +270,7 @@ function f$_start_jquery() {
                 f$('video').each(function(index) { f$(this).attr('id','f_video_'+index); });
 
                 f$.getScript(f$_nav+'lib/video-js/video.js', function() {
-                    console.log('Ok video.js');
+                    console.log('✔ video.js');
                     videojs.options.flash.swf = f$_nav+'lib/video-js/video-js.swf';
                     // On "clique" sur les sous-titres Français
                     // pour chaque vidéo dès que VideoJS est prêt
@@ -396,19 +430,31 @@ function f$_start_jquery() {
                             '</div>'+
                         '</div>');
 
-                        f$(f$_modal_don_liendl).click(function() {
-                            var dejavu = getCookie('dondl')
+                        if(f$_modal_don_liendl=='onstart') {
+                            var dejavu = getCookie('dondl');
                             if(!dejavu) {
-                                link=f$(this).attr('href');
                                 f$('#modal-soutenir').modal('show');
-                                f$('#modal-contact, #modal-don, #modal-dl').click(function() {
-                                    setCookie('dondl',true,f$_modal_don_cookie)
+                                f$('#modal-soutenir').css('display','block'); // bugfix
+                                f$('#modal-contact, #modal-don, #modal-dl, #modal-soutenir .close').click(function() {
+                                    setCookie('dondl',true,f$_modal_don_cookie);
                                     f$('#modal-soutenir').modal('hide');
-                                    window.location.href = link;
                                 });
-                            return false;
                             }
-                        });
+                        } else {
+                            f$(f$_modal_don_liendl).click(function() {
+                                var dejavu = getCookie('dondl');
+                                if(!dejavu) {
+                                    link=f$(this).attr('href');
+                                    f$('#modal-soutenir').modal('show');
+                                    f$('#modal-contact, #modal-don, #modal-dl').click(function() {
+                                        setCookie('dondl',true,f$_modal_don_cookie);
+                                        f$('#modal-soutenir').modal('hide');
+                                        window.location.href = link;
+                                    });
+                                return false;
+                                }
+                            });
+                        }
                     }
 
                     // Opt-in
@@ -464,6 +510,9 @@ function f$_start_jquery() {
                         });
                     }
 
+                    // Flux RSS Global
+                    f$('head').append('<link rel="alternate" type="application/rss+xml" title="Flux global de Framasoft" href="http://rss.framasoft.org/" />');
+
                     // Macaron
                     if(f$_donate) {
                         f$('#framanav_donation').show().delay(Math.random() * (29000 - 1000) + 1000).fadeOut(600).fadeIn(600);
@@ -496,7 +545,7 @@ function f$_start_jquery() {
                             url: f$_nav+'footer.html'
                         })
                         .fail(function() {
-                            console.error('Pas de footer.html');
+                            console.error('✘ footer.html');
                         })
                         .done(function(html) {
                             f$('body').append(html);
@@ -523,7 +572,7 @@ function f$_start_jquery() {
 
                 if(f$_extra_js) {
                     f$.getScript(f$_nav+'config/'+f$_site+'_extra.js', function() {
-                        console.log('Ok extra.js');
+                        console.log('✔ extra.js');
                     });
                 }
 
