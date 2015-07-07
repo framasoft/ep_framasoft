@@ -1,5 +1,5 @@
 var eejs = require('ep_etherpad-lite/node/eejs/');
 // Add client code
-exports.eejsBlock_htmlHead = function (hook_name, args, cb) {
-    args.content = args.content + '<script src="../static/plugins/ep_framasoft/static/nav/nav.js"></script>';
+exports.eejsBlock_scripts = function (hook_name, args, cb) {
+    args.content = args.content + '<script type="text/javascript">var nav_script = document.createElement("script");nav_script.type = "text/javascript";nav_script.src="/nav/nav.js";document.getElementsByTagName("head"    )[0].appendChild(nav_script);</script>';
 }

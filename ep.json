@@ -3,7 +3,7 @@
         {
             "name": "ep_framasoft",
             "hooks": {
-                "eejsBlock_htmlHead": "ep_framasoft/pad"
+                "eejsBlock_scripts": "ep_framasoft/pad"
             }
         }
     ]
