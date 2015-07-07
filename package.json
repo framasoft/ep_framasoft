@@ -1,6 +1,6 @@
 {
     "name": "ep_framasoft",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Add framasoft navbar to Etherpad",
     "author": {
         "name": "Luc Didry",
