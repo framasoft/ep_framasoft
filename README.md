@@ -9,6 +9,4 @@ Si vous souhaitez travailler avec nous, **forkez-nous sur [framagit.org](https:/
 
 # Ep_framasoft
 
-Add framasoft navbar to Etherpad
-
-We use https://git.framasoft.org/framasoft/framanav.git, hosted at https://framapad.org.
+Add [framasoft navbar](https://framagit.org/framasoft/framanav.git) to Etherpad
